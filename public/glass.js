@@ -135,14 +135,7 @@ class LiquidGlass {
     const glassElements = document.getElementsByClassName("liquid-glass");
     LiquidGlass.ids = [];
     for (let i = 0; i < glassElements.length; i++) {
-      const g = () => Math.floor(Math.random() * 1e8);
-      let id = g();
-      while (LiquidGlass.ids.includes(id)) {
-        id = g();
-      }
-      LiquidGlass.ids.push(id);
-      //console.log(LiquidGlass.ids);
-      //console.log(id);
+      
       const elem = glassElements[i];
       const { width, height } = elem.getBoundingClientRect();
       let frostStyle = getComputedStyle(elem).getPropertyValue("--glass-frost");
@@ -154,9 +147,17 @@ class LiquidGlass {
       let scaleStyle = getComputedStyle(elem).getPropertyValue("--glass-strength");
       if (!scaleStyle) scaleStyle = 0;
       const scale = parseInt(scaleStyle, 10);
-      elem.style.setProperty("backdrop-filter", `url("#disp-svg-${id}")`, "important");
       const radius = Math.min(height / 2, width / 2, parseInt(getComputedStyle(elem).borderRadius, 10));
       //console.log(radius);
+      let id = `glass-w${width}-h${height}-r${radius}-f${frost}-d${depth}-s${scale}`;
+      elem.style.setProperty("backdrop-filter", `url("#disp-svg-${id}")`, "important");
+      
+      if (LiquidGlass.ids.includes(id)) {
+        return;
+      }
+      LiquidGlass.ids.push(id);
+      //console.log(LiquidGlass.ids);
+      //console.log(id);
       const canvas = LiquidGlass.generateDisplacementMap(width, height, radius, depth, scale);
       //elem.appendChild(canvas);
       const svg = LiquidGlass.generateSVG(width, height, canvas.toDataURL(), id, frost, scale);
