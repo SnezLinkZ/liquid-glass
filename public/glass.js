@@ -16,7 +16,7 @@
 
 class LiquidGlass {
   static colorCoeff = 128;
-  static smoothCoefficient = 0.2;
+  static smoothCoefficient = 0.4;
   static padding = 0;
   static depth = 40;
   static ids = [];
@@ -129,6 +129,9 @@ class LiquidGlass {
     if (!filterContainer) {
       filterContainer = document.createElement("div");
       filterContainer.id = "glass-filters";
+      filterContainer.style.setProperty("position", "fixed");
+      filterContainer.style.setProperty("left", "100vw");
+      filterContainer.style.setProperty("top", "100vh");
       document.body.appendChild(filterContainer);
     }
     filterContainer.replaceChildren();
@@ -153,7 +156,7 @@ class LiquidGlass {
       elem.style.setProperty("backdrop-filter", `url("#disp-svg-${id}")`, "important");
       
       if (LiquidGlass.ids.includes(id)) {
-        return;
+        continue;
       }
       LiquidGlass.ids.push(id);
       //console.log(LiquidGlass.ids);
