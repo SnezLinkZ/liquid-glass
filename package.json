@@ -1,0 +1,15 @@
+{
+  "name": "liquid-glass",
+  "version": "1.0.0",
+  "description": "HTML5 + JS Liquid Glass Demo",
+  "license": "MIT",
+  "author": "SnezLinkZ",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

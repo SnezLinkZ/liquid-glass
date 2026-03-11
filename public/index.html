@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Liquid Glass by SnezLinkZ</title>
+    <link rel="stylesheet" href="glass.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- <svg width="524" height="324">
+  <filter id="disp">
+    <feImage id="dispMap" x="0" y="0" width="524" height="324" result="map" />
+    <feGaussianBlur in="SourceGraphic" result="blurred" stdDeviation="2" />
+    <feDisplacementMap in2="map" in="blurred" scale="20" xChannelSelector="R" yChannelSelector="G" />
+  </filter> -->
+
+  </svg>
+    <div class="liquid-glass" style="--x: 50px; --y: 200px; height: 300px; width: 500px;">
+      <div class="liquid-glass" style="position: relative !important;width:300px;height:200px;--x: 50px;--y: 50px;">hello</div>
+    </div>
+   <div class="liquid-glass" style="--x: 206px; --y: 560px; height: 300px; width: 300px;"></div>
+   <div class="liquid-glass" style="--x: 614px; --y: 132px; height: 500px; width: 300px;"></div>
+   <h1 style="color: #fff">lorem ipsum dolor sit amet consecuteur</h1>
+   </body>
+  <script src="glass.js"></script>
+  <script>
+    
+  var keys = {
+    w: false,
+    a: false,
+    s: false,
+    d: false
+  };
+    document.addEventListener("DOMContentLoaded", function(e) {
+  LiquidGlass.mapElements();
+})
+function loop() {
+    if (keys.w) y -= 1;
+    if (keys.s) y += 1;
+    if (keys.a) x -= 1;
+    if (keys.d) x += 1;
+
+    q.style.setProperty("--x", x + "px");
+    q.style.setProperty("--y", y + "px");
+
+    requestAnimationFrame(LiquidGlass.loop);
+  }
+const q = document.getElementsByClassName("liquid-glass")[0];
+
+let x = parseInt(q.style.getPropertyValue("--x"), 10) || 0;
+let y = parseInt(q.style.getPropertyValue("--y"), 10) || 0;
+
+document.addEventListener("keydown", (e) => {
+  if (e.key in keys) keys[e.key] = true;
+});
+
+document.addEventListener("keyup", (e) => {
+  if (e.key in keys) keys[e.key] = false;
+});
+(function () {
+  function initDraggable(el) {
+    let dragging = false;
+    let startMouseX = 0, startMouseY = 0;
+    let startElX = 0, startElY = 0;
+
+    function getCSSVar(name) {
+      return parseFloat(getComputedStyle(el).getPropertyValue(name)) || 0;
+    }
+
+    el.addEventListener('mousedown', function (e) {
+      if (e.button !== 0) return;
+      e.preventDefault();
+      dragging = true;
+      el.classList.add('dragging');
+      startMouseX = e.clientX;
+      startMouseY = e.clientY;
+      startElX = getCSSVar('--x');
+      startElY = getCSSVar('--y');
+      document.querySelectorAll('.liquid-glass').forEach(g => g.style.zIndex = '');
+      el.style.zIndex = '9999';
+    });
+
+    el.addEventListener('touchstart', function (e) {
+      const t = e.touches[0];
+      dragging = true;
+      el.classList.add('dragging');
+      startMouseX = t.clientX;
+      startMouseY = t.clientY;
+      startElX = getCSSVar('--x');
+      startElY = getCSSVar('--y');
+      document.querySelectorAll('.liquid-glass').forEach(g => g.style.zIndex = '');
+      el.style.zIndex = '9999';
+    }, { passive: true });
+
+    function onMove(x, y) {
+      if (!dragging) return;
+      el.style.setProperty('--x', (startElX + x - startMouseX) + 'px');
+      el.style.setProperty('--y', (startElY + y - startMouseY) + 'px');
+    }
+
+    function onUp() {
+      dragging = false;
+      el.classList.remove('dragging');
+    }
+
+    window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+    window.addEventListener('touchmove', e => onMove(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+    window.addEventListener('mouseup', onUp);
+    window.addEventListener('touchend', onUp);
+  }
+
+  document.querySelectorAll('.liquid-glass').forEach(initDraggable);
+
+  new MutationObserver(mutations => {
+    mutations.forEach(m => m.addedNodes.forEach(node => {
+      if (node.nodeType !== 1) return;
+      if (node.matches('.liquid-glass')) initDraggable(node);
+      node.querySelectorAll('.liquid-glass').forEach(initDraggable);
+    }));
+  }).observe(document.body, { childList: true, subtree: true });
+})();
+</script>
+</html>
